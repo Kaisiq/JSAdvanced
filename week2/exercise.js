@@ -10,11 +10,11 @@ var memSum = memoize(sum);
 
 function memoize(func){
     var cache = {};
-    return (...args) => {
-        key = JSON.stringify(args);
+    return () => {
+        key = JSON.stringify(arguments);
         if(cache[key] === undefined){
             console.log("Calculating");
-            cache[key] = func(...args);
+            cache[key] = func.apply(undefined, arguments);
         }
         return cache[key];
     }
@@ -29,20 +29,26 @@ function trippleAdd(a, b, c) {
 
 const cTrippleAdd = curry(trippleAdd);
 
-// console.log(cTrippleAdd(1)(2)(3)); //6
-// console.log(cTrippleAdd(1, 2)(3)); //6
-// console.log(cTrippleAdd(1, 2, 3)); //6
+console.log(cTrippleAdd(1)(2)(3)); //6
+console.log(cTrippleAdd(1, 2)(3)); //6
+console.log(cTrippleAdd(1, 2, 3)); //6
 
 
-function curry(func, list = []){
-    if(func.length <= list.length){
-        return func(...list);
-    }
-    return (...args) =>{
-        return curry(func, [...args, ...list]);
-    } 
+function curry(fn) {
+    var arity = fn.length;
+    var args = [];
+    return function helper() {
+        args = args.concat([].slice.call(arguments));
+        if (args.length >= arity) {
+            try {
+              return fn.apply(undefined, args);
+            } finally {
+              args = [];
+            }
+        }
+        return helper;
+    };
 }
-
 
 //3 Напишете функция compose която ни прави композиция от n на брой функции.
 var addOne = (x) => x + 1;
@@ -51,7 +57,7 @@ var log = (x) => console.log(x);
 
 addOneSqrtAndPrint = compose(log, sqrt, addOne);
 
-addOneSqrtAndPrint(1); // 4
+// addOneSqrtAndPrint(1); // 4
 
 
 function compose(){
