@@ -2,6 +2,8 @@
 
 ### Материали за курса JS за напреднали 2023/2024г.
 
+[Проект по JS за напреднали](https://github.com/Wo11and/chatt.ing)
+
 [Седмица 01 - Запознаване с езика JS, оператори, обекти](https://github.com/Kaisiq/JSAdvanced/tree/main/week1)
 
 [Седмица 02 - Closures, scopes, context, наследяване на обекти, call, apply, bind](https://github.com/Kaisiq/JSAdvanced/tree/main/week2)
