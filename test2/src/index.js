@@ -49,7 +49,7 @@ export class FileData extends HTMLElement {
     }
 
     handleMessage(msg) {
-        this.fileData.push(msg);
+        this.fileData.push(JSON.stringify(msg));
         this.render();
     }
     clearMessages() {
@@ -64,8 +64,7 @@ export class FileData extends HTMLElement {
 
     startPolling = () => {
         console.log("start-polling");
-        console.log(this.pidInputValue);
-        console.log(this.socket);
+        // console.log(this.pidInputValue);
         this.socket.emit("start-polling", this.pidInputValue);
         // ...
     };
@@ -73,7 +72,7 @@ export class FileData extends HTMLElement {
     stopPolling = () => {
         console.log("stop-polling");
         this.socket.emit("stop-polling");
-        this.clearMessages;
+        this.clearMessages();
         // ...
     };
 

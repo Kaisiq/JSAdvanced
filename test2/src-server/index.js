@@ -14,20 +14,22 @@ const bodyParser = require("body-parser");
 
 io.on("connection", function (socket) {
     console.log("a user connected");
-    setTimeout(() => io.send("sample message"), 1000);
+    // setTimeout(() => io.send("sample message"), 1000);
 
     socket.on("disconnect", function () {
         console.log("user disconnected");
     });
 
-    socket.on("start-polling", function (msg) {
-        console.log("start-polling", msg);
+    socket.on("start-polling", function (id) {
+        console.log("start-polling", id);
         intervalId = setInterval(async () => {
             const processes = await checkProcess();
-            socket.emit("message", processes);
+            const targetProcess = findProcess(processes, id);
+            // console.log(targetProcess);
+            if (targetProcess) {
+                socket.emit("message", targetProcess);
+            }
         }, 1000);
-
-        socket.emit("message", "test message");
     });
     socket.on("stop-polling", function () {
         console.log("stop-polling");
@@ -36,9 +38,18 @@ io.on("connection", function (socket) {
     });
 });
 
+function findProcess(processes, id) {
+    let found = undefined;
+    processes.forEach((el) => {
+        if (el.pid == id) {
+            found = el;
+        }
+    });
+    return found;
+}
+
 async function checkProcess() {
     const data = await psList();
-    console.log(data);
     return data;
 }
 checkProcess();
